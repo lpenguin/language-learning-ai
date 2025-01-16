@@ -1,29 +1,45 @@
 import React, { useState } from 'react';
 
-const WordSubstitutionWidget = ({ sentences, onSubmit }) => {
-  const [answers, setAnswers] = useState(
+interface WordSubstitutionWidgetProps {
+  sentences: Array<{
+    text: string;
+    answer: string;
+  }>;
+  onSubmit: (answers: Record<string, string>) => void;
+}
+
+interface ExerciseAnswer {
+  sentence: string;
+  filledAnswers: string[];
+}
+
+const WordSubstitutionWidget: React.FC<WordSubstitutionWidgetProps> = ({ sentences, onSubmit }) => {
+  const [answers, setAnswers] = useState<string[][]>(
     sentences.map(sentence => {
-      const blanks = (sentence.match(/____/g) || []).length;
+      const blanks = (sentence.text.match(/____/g) || []).length;
       return new Array(blanks).fill('');
     })
   );
 
-  const handleAnswerChange = (sentenceIndex, blankIndex, value) => {
+  const handleAnswerChange = (sentenceIndex: number, blankIndex: number, value: string) => {
     const newAnswers = [...answers];
     newAnswers[sentenceIndex][blankIndex] = value;
     setAnswers(newAnswers);
   };
 
   const handleSubmit = () => {
-    const exerciseAnswers = sentences.map((sentence, sentenceIndex) => ({
-      sentence,
+    const exerciseAnswers: ExerciseAnswer[] = sentences.map((sentence, sentenceIndex) => ({
+      sentence: sentence.text,
       filledAnswers: answers[sentenceIndex]
     }));
-    onSubmit(exerciseAnswers);
+    onSubmit(exerciseAnswers.reduce((acc, curr, idx) => {
+      acc[`sentence${idx + 1}`] = curr.filledAnswers.join(',');
+      return acc;
+    }, {} as Record<string, string>));
   };
 
-  const renderSentence = (sentence, sentenceIndex) => {
-    const parts = sentence.split('____');
+  const renderSentence = (sentence: { text: string; answer: string }, sentenceIndex: number) => {
+    const parts = sentence.text.split('____');
     return (
       <div key={sentenceIndex} className="mb-4">
         <div className="flex flex-wrap items-center gap-2">

@@ -1,18 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent, ChangeEvent } from 'react';
 import WordSubstitutionWidget from './components/WordSubstitutionWidget';
 import { generateAIResponse } from './api/openai';
 import './index.css';
 
-function App() {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+interface Message {
+  role: 'user' | 'assistant';
+  content: string;
+  isExercise?: boolean;
+  exerciseType?: 'word_substitution';
+}
 
-  const handleChatSubmit = async (e) => {
+interface WordSubstitutionExercise {
+  exercise_type: 'word_substitution';
+  sentences: Array<{
+    text: string;
+    answer: string;
+  }>;
+}
+
+function App() {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const handleChatSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (input.trim() === '') return;
 
-    const userMessage = {
+    const userMessage: Message = {
       role: 'user',
       content: input
     };
@@ -22,11 +37,11 @@ function App() {
 
     try {
       const aiResponse = await generateAIResponse([...messages, userMessage]);
-      let aiMessage;
+      let aiMessage: Message;
 
       // Check if the response is a structured exercise
       try {
-        const parsedResponse = JSON.parse(aiResponse);
+        const parsedResponse = JSON.parse(aiResponse) as WordSubstitutionExercise;
         if (parsedResponse.exercise_type === 'word_substitution') {
           aiMessage = {
             role: 'assistant',
@@ -34,6 +49,8 @@ function App() {
             isExercise: true,
             exerciseType: 'word_substitution'
           };
+        } else {
+          throw new Error('Not a word substitution exercise');
         }
       } catch {
         // If not JSON, treat as normal message
@@ -54,8 +71,8 @@ function App() {
     setIsLoading(false);
   };
 
-  const handleExerciseSubmit = async (answers) => {
-    const userMessage = {
+  const handleExerciseSubmit = async (answers: Record<string, string>) => {
+    const userMessage: Message = {
       role: 'user',
       content: JSON.stringify(answers)
     };
@@ -78,10 +95,10 @@ function App() {
     setIsLoading(false);
   };
 
-  const renderMessage = (message, index) => {
+  const renderMessage = (message: Message, index: number) => {
     if (message.isExercise && message.exerciseType === 'word_substitution') {
       try {
-        const exercise = JSON.parse(message.content);
+        const exercise = JSON.parse(message.content) as WordSubstitutionExercise;
         return (
           <div key={index} className="mb-4">
             <div className="bg-green-100 p-2 rounded mb-2">
@@ -147,7 +164,7 @@ function App() {
           <input
             value={input}
             placeholder="Chat with your AI tutor or ask for exercises..."
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
             className="flex-grow border p-2 rounded"
             disabled={isLoading}
           />
