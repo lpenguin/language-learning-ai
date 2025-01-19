@@ -64,7 +64,7 @@ const WordSubstitutionWidget: React.FC<ExerciseWidgetProps> = ({ sentences, onSu
       </div>
       <button
         onClick={handleSubmit}
-        className="submit-button"
+        className="exercise-submit-button"
       >
         Submit Answers
       </button>

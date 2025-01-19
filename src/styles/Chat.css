@@ -121,10 +121,10 @@ body {
     color: #e4e6eb;
 }
 
-.submit-button {
+.chat-submit-button {
     position: absolute;
     right: 0.75rem;
-    top: 0.73rem;
+    top: 1.7rem;
     transform: translateY(-50%);
     background: transparent;
     border: none;
@@ -140,16 +140,16 @@ body {
     transition: background-color 0.2s ease;
 }
 
-.submit-button:hover {
+.chat-submit-button:hover {
     background: rgba(0, 132, 255, 0.1);
 }
 
-.submit-button:disabled {
+.chat-submit-button:disabled {
     color: #8e8e8e;
     cursor: not-allowed;
 }
 
-.submit-button:disabled:hover {
+.chat-submit-button:disabled:hover {
     background: transparent;
 }
 

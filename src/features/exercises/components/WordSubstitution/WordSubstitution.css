@@ -1,3 +1,12 @@
+.widget-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 1rem;
+  position: relative;
+  min-height: 100px;
+}
+
 .word-input {
   border: none;
   border-bottom: 1px solid #ccc;
@@ -28,19 +37,21 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-bottom: 1rem;
 }
 
-.submit-button {
-  margin-top: 1rem;
+.exercise-submit-button {
   background-color: #3b82f6;
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
+  padding: 8px 16px;
+  border-radius: 20px;
   border: none;
   cursor: pointer;
   transition: background-color 0.2s;
+  width: 100%;
+  font-size: 1rem;
 }
 
-.submit-button:hover {
+.exercise-submit-button:hover {
   background-color: #2563eb;
 }

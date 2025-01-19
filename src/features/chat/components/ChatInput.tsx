@@ -55,7 +55,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
         />
         <button
           onClick={handleSubmit}
-          className="submit-button"
+          className="chat-submit-button"
           disabled={isLoading}
           aria-label="Send message"
         >
