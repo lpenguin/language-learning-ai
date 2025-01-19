@@ -1,22 +1,10 @@
 import React, { useState } from 'react';
+import { ExerciseWidgetProps, ExerciseAnswer } from '../../../../types/exercise';
 
-interface WordSubstitutionWidgetProps {
-  sentences: Array<{
-    text: string;
-    answer: string;
-  }>;
-  onSubmit: (answers: Record<string, string>) => void;
-}
-
-interface ExerciseAnswer {
-  sentence: string;
-  filledAnswers: string[];
-}
-
-const WordSubstitutionWidget: React.FC<WordSubstitutionWidgetProps> = ({ sentences, onSubmit }) => {
+const WordSubstitutionWidget: React.FC<ExerciseWidgetProps> = ({ sentences, onSubmit }) => {
   const [answers, setAnswers] = useState<string[][]>(
     sentences.map(sentence => {
-      const blanks = (sentence.text.match(/____/g) || []).length;
+      const blanks = (sentence.match(/____/g) || []).length;
       return new Array(blanks).fill('');
     })
   );
@@ -28,18 +16,23 @@ const WordSubstitutionWidget: React.FC<WordSubstitutionWidgetProps> = ({ sentenc
   };
 
   const handleSubmit = () => {
-    const exerciseAnswers: ExerciseAnswer[] = sentences.map((sentence, sentenceIndex) => ({
-      sentence: sentence.text,
-      filledAnswers: answers[sentenceIndex]
-    }));
-    onSubmit(exerciseAnswers.reduce((acc, curr, idx) => {
-      acc[`sentence${idx + 1}`] = curr.filledAnswers.join(',');
-      return acc;
-    }, {} as Record<string, string>));
+    // Filter out sentences with no answers
+    const validAnswers = answers.map((sentenceAnswers, idx) => ({
+      sentence: sentences[idx],
+      answers: sentenceAnswers.map(ans => ans.trim()).filter(ans => ans !== '')
+    })).filter(item => item.answers.length > 0);
+
+    if (validAnswers.length > 0) {
+      const answer: ExerciseAnswer = {
+        sentences: validAnswers.map(item => item.sentence),
+        filledAnswers: validAnswers.map(item => item.answers)
+      };
+      onSubmit(answer);
+    }
   };
 
-  const renderSentence = (sentence: { text: string; answer: string }, sentenceIndex: number) => {
-    const parts = sentence.text.split('____');
+  const renderSentence = (sentence: string, sentenceIndex: number) => {
+    const parts = sentence.split('____');
     return (
       <div key={sentenceIndex} className="mb-4">
         <div className="flex flex-wrap items-center gap-2">
@@ -49,7 +42,7 @@ const WordSubstitutionWidget: React.FC<WordSubstitutionWidgetProps> = ({ sentenc
               {partIndex < parts.length - 1 && (
                 <input
                   type="text"
-                  className="border border-gray-300 rounded px-2 py-1 w-24 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="border-b border-gray-300 px-2 py-1 w-16 bg-transparent focus:outline-none focus:border-blue-500"
                   value={answers[sentenceIndex][partIndex] || ''}
                   onChange={(e) => handleAnswerChange(sentenceIndex, partIndex, e.target.value)}
                   placeholder="Enter word"
@@ -77,4 +70,4 @@ const WordSubstitutionWidget: React.FC<WordSubstitutionWidgetProps> = ({ sentenc
   );
 };
 
-export default WordSubstitutionWidget;
+export default React.memo(WordSubstitutionWidget);
