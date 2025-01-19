@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ExerciseWidgetProps, ExerciseAnswer } from '../../../../types/exercise';
+import './WordSubstitution.css';
 
 const WordSubstitutionWidget: React.FC<ExerciseWidgetProps> = ({ sentences, onSubmit }) => {
   const [answers, setAnswers] = useState<string[][]>(
@@ -34,18 +35,19 @@ const WordSubstitutionWidget: React.FC<ExerciseWidgetProps> = ({ sentences, onSu
   const renderSentence = (sentence: string, sentenceIndex: number) => {
     const parts = sentence.split('____');
     return (
-      <div key={sentenceIndex} className="mb-4">
-        <div className="flex flex-wrap items-center gap-2">
+      <div key={sentenceIndex} className="sentence-container">
+        <div className="sentence-content">
           {parts.map((part, partIndex) => (
             <React.Fragment key={partIndex}>
               <span>{part}</span>
               {partIndex < parts.length - 1 && (
                 <input
                   type="text"
-                  className="border-b border-gray-300 px-2 py-1 w-16 bg-transparent focus:outline-none focus:border-blue-500"
+                  className="word-input"
                   value={answers[sentenceIndex][partIndex] || ''}
                   onChange={(e) => handleAnswerChange(sentenceIndex, partIndex, e.target.value)}
                   placeholder="Enter word"
+                  size={Math.max(8, answers[sentenceIndex][partIndex]?.length || 8)}
                 />
               )}
             </React.Fragment>
@@ -57,12 +59,12 @@ const WordSubstitutionWidget: React.FC<ExerciseWidgetProps> = ({ sentences, onSu
 
   return (
     <div className="widget-container">
-      <div className="space-y-4">
+      <div className="sentences-list">
         {sentences.map((sentence, index) => renderSentence(sentence, index))}
       </div>
       <button
         onClick={handleSubmit}
-        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+        className="submit-button"
       >
         Submit Answers
       </button>
