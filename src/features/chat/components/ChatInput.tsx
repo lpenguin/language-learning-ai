@@ -1,4 +1,5 @@
 import React, { FormEvent, ChangeEvent } from 'react';
+import PaperPlaneIcon from '../../../common/components/PaperPlaneIcon';
 
 interface ChatInputProps {
   value: string;
@@ -30,19 +31,37 @@ const ChatInput: React.FC<ChatInputProps> = ({
     }
   };
 
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!isLoading) {
+      await onSubmit({} as FormEvent<HTMLFormElement>);
+      onAfterSubmit?.();
+    }
+  };
+
   return (
     <div className="input-area">
-      <input
-        ref={inputRef}
-        type="text"
-        value={value}
-        onChange={onChange}
-        onKeyDown={handleKeyDown}
-        onBlur={() => inputRef.current?.focus()} // Force focus on blur
-        placeholder="Chat with your AI tutor or ask for exercises..."
-        className="message-input"
-        disabled={isLoading}
-      />
+      <div className="input-container">
+        <input
+          ref={inputRef}
+          type="text"
+          value={value}
+          onChange={onChange}
+          onKeyDown={handleKeyDown}
+          onBlur={() => inputRef.current?.focus()} // Force focus on blur
+          placeholder="Chat with your AI tutor or ask for exercises..."
+          className="message-input"
+          disabled={isLoading}
+        />
+        <button
+          onClick={handleSubmit}
+          className="submit-button"
+          disabled={isLoading}
+          aria-label="Send message"
+        >
+          <PaperPlaneIcon />
+        </button>
+      </div>
     </div>
   );
 };
