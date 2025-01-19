@@ -24,38 +24,42 @@ body {
     border: none;
     color: #e4e6eb;
     cursor: pointer;
-    font-size: 1.5rem;
-    padding: 0.5rem;
+    font-size: 1.2rem;
+    padding: 0.3rem;
     z-index: 1000;
-    width: 40px;
+    width: 32px;
     visibility: visible;
 }
 
 .menu-placeholder {
-    width: 40px;
+    width: 32px;
     visibility: hidden;
 }
 
 .chat-header {
     text-align: center;
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 400;
     flex: 1;
 }
 
 .header-container {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     background: #242526;
-    padding: 1rem;
+    padding: 0.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
+    z-index: 997;
 }
 
 .messages {
     flex: 1;
     overflow-y: auto;
-    padding: 1rem;
+    padding: 3.5rem 1rem 1rem 1rem;
     background: #1e1e1e;
     max-width: 42rem; /* 672px / 16px (default browser font size) = 42rem */
     margin: 0 auto; /* Center horizontally */
