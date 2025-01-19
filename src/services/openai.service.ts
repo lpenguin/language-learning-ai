@@ -9,7 +9,6 @@ interface OpenAIMessage {
   content: string;
 }
 
-
 export class OpenAIService {
   private static instance: OpenAIService;
 
@@ -25,7 +24,8 @@ export class OpenAIService {
   public async generateResponse(messages: Message[], customSystemPrompt?: string): Promise<string> {
     const systemMessage: SystemMessage = {
       role: 'system',
-      content: customSystemPrompt || SYSTEM_PROMPT
+      content: customSystemPrompt || SYSTEM_PROMPT,
+      timestamp: new Date().toISOString()
     };
     
     const formattedMessages: OpenAIMessage[] = [
@@ -43,7 +43,8 @@ export class OpenAIService {
     const prompt = this.getExercisePrompt(topic);
     const userMessage: Message = {
       role: 'user',
-      content: prompt
+      content: prompt,
+      timestamp: new Date().toISOString()
     };
 
     return this.generateResponse([userMessage]);
@@ -53,7 +54,8 @@ export class OpenAIService {
     const prompt = this.getAnswerCheckingPrompt(answer);
     const userMessage: Message = {
       role: 'user',
-      content: prompt
+      content: prompt,
+      timestamp: new Date().toISOString()
     };
 
     return this.generateResponse([userMessage]);

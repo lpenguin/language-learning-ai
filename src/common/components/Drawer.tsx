@@ -13,6 +13,14 @@ interface DrawerProps {
   onNewChat: () => void;
 }
 
+const getLastUserMessageTimestamp = (chat: Chat): number => {
+  const userMessages = chat.messages.filter(msg => msg.role === 'user');
+  if (userMessages.length === 0) {
+    return new Date(0).getTime(); // Return epoch time if no user messages
+  }
+  return new Date(userMessages[userMessages.length - 1].timestamp).getTime();
+};
+
 const Drawer: React.FC<DrawerProps> = ({
   isOpen,
   onClose,
@@ -39,7 +47,9 @@ const Drawer: React.FC<DrawerProps> = ({
               <div className="section">
                 <h3>Recents</h3>
                 <div className="chat-list">
-                  {chats.map(chat => (
+                  {[...chats]
+                    .sort((a, b) => getLastUserMessageTimestamp(b) - getLastUserMessageTimestamp(a))
+                    .map(chat => (
                     <div
                       key={chat.id}
                       className={`chat-item ${chat.id === currentChatId ? 'active' : ''}`}

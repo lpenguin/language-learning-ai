@@ -35,8 +35,7 @@ class ChatService {
     return {
       id: uuidv4(),
       name: 'New Chat',
-      messages: [],
-      createdAt: new Date().toISOString()
+      messages: []
     };
   }
 
@@ -47,7 +46,8 @@ class ChatService {
     try {
       const name = await openAIService.generateResponse([{
         role: 'user',
-        content: prompt
+        content: prompt,
+        timestamp: new Date().toISOString()
       }], systemPrompt);
       const cleanedName = name.trim().replace(/^["']|["']$/g, ''); // Remove quotes if present
       return cleanedName || 'New Chat';

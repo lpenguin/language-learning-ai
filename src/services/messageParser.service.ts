@@ -22,7 +22,8 @@ export class MessageParserService {
         return {
           role: 'assistant',
           content: response,
-          parts: parts
+          parts: parts,
+          timestamp: new Date().toISOString()
         };
       } catch (error) {
         console.error('Error parsing exercise:', error);
@@ -35,7 +36,8 @@ export class MessageParserService {
       parts: [{
         type: 'text',
         text: response
-      }]
+      }],
+      timestamp: new Date().toISOString()
     };
   }
 

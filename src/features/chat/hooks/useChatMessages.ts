@@ -59,7 +59,8 @@ export const useChatMessages = ({ initialChatState }: UseChatMessagesProps = {})
 
     const userMessage: Message = {
       role: 'user',
-      content: input
+      content: input,
+      timestamp: new Date().toISOString()
     };
     const currentChat = chatState.chats.find(chat => chat.id === chatState.currentChatId);
     if (!currentChat) return;
@@ -117,7 +118,8 @@ export const useChatMessages = ({ initialChatState }: UseChatMessagesProps = {})
     const userMessage: Message = {
       role: 'user',
       content: '', // Content will be displayed through ExerciseAnswerDisplay
-      exerciseAnswer: answer
+      exerciseAnswer: answer,
+      timestamp: new Date().toISOString()
     };
 
     const currentChat = chatState.chats.find(chat => chat.id === chatState.currentChatId);
@@ -142,7 +144,8 @@ export const useChatMessages = ({ initialChatState }: UseChatMessagesProps = {})
         parts: [{
           type: 'text',
           text: aiResponse
-        }]
+        }],
+        timestamp: new Date().toISOString()
       };
       addMessage(aiMessage);
 

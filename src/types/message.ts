@@ -6,11 +6,13 @@ export type OpenAIRole = MessageRole | SystemRole;
 
 interface BaseMessage {
   content: string;
+  timestamp: string; // ISO string timestamp
 }
 
 export interface SystemMessage {
   role: SystemRole;
   content: string;
+  timestamp: string;
 }
 
 export interface BaseUserAssistantMessage extends BaseMessage {
