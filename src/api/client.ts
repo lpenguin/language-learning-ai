@@ -1,15 +1,16 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { APIConfig, APIErrorResponse } from '../types/api';
-import { API_CONFIG } from '../config/api';
 
 export class APIClient {
   private client: AxiosInstance;
+  private currentConfig: APIConfig;
 
-  constructor(config: APIConfig = API_CONFIG) {
+  constructor(apiKey: string = '', baseURL: string = 'https://api.openai.com/v1') {
+    this.currentConfig = new APIConfig(apiKey, baseURL);
     this.client = axios.create({
-      baseURL: config.baseURL,
+      baseURL: this.currentConfig.baseURL,
       headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
+        'Authorization': `Bearer ${this.currentConfig.apiKey}`,
         'Content-Type': 'application/json'
       }
     });
@@ -19,6 +20,20 @@ export class APIClient {
       response => response,
       this.handleError
     );
+
+    // Add request interceptor to update Authorization header
+    this.client.interceptors.request.use(
+      config => {
+        config.headers['Authorization'] = `Bearer ${this.currentConfig.apiKey}`;
+        return config;
+      },
+      error => Promise.reject(error)
+    );
+  }
+
+  public updateConfig(apiKey: string, baseURL: string) {
+    this.currentConfig = new APIConfig(apiKey, baseURL);
+    this.client.defaults.baseURL = this.currentConfig.baseURL;
   }
 
   private handleError(error: AxiosError): never {

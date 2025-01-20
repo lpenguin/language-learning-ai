@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import ErrorBoundary from './common/components/ErrorBoundary';
+import { SettingsProvider } from './contexts/SettingsContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,9 +12,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ErrorBoundary>
-      <App />
+      <SettingsProvider>
+        <App />
+      </SettingsProvider>
     </ErrorBoundary>
   </React.StrictMode>
 );
-
-

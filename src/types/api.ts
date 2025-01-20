@@ -12,14 +12,6 @@ export interface OpenAIError {
   };
 }
 
-export interface APIConfig {
-  apiKey: string;
-  baseURL: string;
-  model: string;
-  temperature: number;
-  maxTokens: number;
-}
-
 import { OpenAIRole } from './message';
 
 export interface APIRequestOptions {
@@ -33,4 +25,17 @@ export interface APIErrorResponse {
   message: string;
   code?: string;
   status?: number;
+}
+
+export class APIConfig {
+  readonly apiKey: string;
+  readonly baseURL: string;
+  readonly model: string = 'gpt-3.5-turbo';
+  readonly temperature: number = 0.7;
+  readonly maxTokens: number = 500;
+
+  constructor(apiKey: string, baseURL: string) {
+    this.apiKey = apiKey;
+    this.baseURL = baseURL;
+  }
 }

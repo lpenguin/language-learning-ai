@@ -36,6 +36,19 @@ body {
     visibility: hidden;
 }
 
+.settings-button {
+    background: transparent;
+    border: none;
+    color: #e4e6eb;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.3rem;
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .chat-header {
     text-align: center;
     font-size: 1rem;

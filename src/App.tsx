@@ -1,4 +1,6 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
+import { SettingsProvider } from './contexts/SettingsContext';
+import { SettingsDialog } from './components/SettingsDialog';
 import ChatInput from './features/chat/components/ChatInput';
 import ChatHistory from './features/chat/components/ChatHistory';
 import Drawer from './common/components/Drawer';
@@ -7,9 +9,10 @@ import './styles/Chat.css';
 import './styles/Drawer.css';
 import './index.css';
 
-function App() {
+const AppContent = () => {
   const [input, setInput] = useState<string>('');
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const { 
     messages, 
     isLoading, 
@@ -53,7 +56,12 @@ function App() {
           <div className="chat-header">
             {currentChat?.name || 'New Chat'}
           </div>
-        <div className="menu-placeholder"></div>
+        <button 
+          className="settings-button" 
+          onClick={() => setIsSettingsOpen(true)}
+        >
+          ⚙️
+        </button>
       </div>
 
       <Drawer 
@@ -84,7 +92,20 @@ function App() {
         onSubmit={onInputSubmit}
         onAfterSubmit={() => setInput('')}
       />
+
+      <SettingsDialog 
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+      />
     </div>
+  );
+};
+
+function App() {
+  return (
+    <SettingsProvider>
+      <AppContent />
+    </SettingsProvider>
   );
 }
 

@@ -5,12 +5,14 @@ import { openAIService } from '../../../services/openai.service';
 import { messageParserService } from '../../../services/messageParser.service';
 import { chatService } from '../../../services/chat.service';
 import { Chat, ChatState } from '../../../types/chat';
+import { useSettings } from '../../../contexts/SettingsContext';
 
 interface UseChatMessagesProps {
   initialChatState?: ChatState;
 }
 
 export const useChatMessages = ({ initialChatState }: UseChatMessagesProps = {}) => {
+  const { settings } = useSettings();
   const [chatState, setChatState] = useState<ChatState>(
     initialChatState || chatService.loadChats()
   );
@@ -19,6 +21,11 @@ export const useChatMessages = ({ initialChatState }: UseChatMessagesProps = {})
     isLoading: false,
     error: null
   });
+
+  // Update API key when settings change
+  useEffect(() => {
+    openAIService.setApiKey(settings.apiKey, settings.baseURL);
+  }, [settings.apiKey, settings.baseURL]);
 
   useEffect(() => {
     const currentChat = chatState.chats.find(chat => chat.id === chatState.currentChatId);
@@ -56,6 +63,10 @@ export const useChatMessages = ({ initialChatState }: UseChatMessagesProps = {})
   const handleChatSubmit = useCallback(async (input: string) => {
     if (!chatState.currentChatId) return;
     if (input.trim() === '') return;
+    if (!settings.apiKey) {
+      setError('Please set your OpenAI API key in settings first.');
+      return;
+    }
 
     const userMessage: Message = {
       role: 'user',
@@ -110,10 +121,14 @@ export const useChatMessages = ({ initialChatState }: UseChatMessagesProps = {})
       setError('Sorry, I encountered an error. Please try again.');
     }
     setLoading(false);
-  }, [chatState, addMessage, setLoading, setError]);
+  }, [chatState, addMessage, setLoading, setError, settings.apiKey]);
 
   const handleExerciseSubmit = useCallback(async (answer: ExerciseAnswer) => {
     if (!chatState.currentChatId) return;
+    if (!settings.apiKey) {
+      setError('Please set your OpenAI API key in settings first.');
+      return;
+    }
     
     const userMessage: Message = {
       role: 'user',
@@ -162,7 +177,7 @@ export const useChatMessages = ({ initialChatState }: UseChatMessagesProps = {})
       setError('Sorry, I encountered an error checking your answers. Please try again.');
     }
     setLoading(false);
-  }, [chatState, addMessage, setLoading, setError]);
+  }, [chatState, addMessage, setLoading, setError, settings.apiKey]);
 
   const createNewChat = useCallback(() => {
     const newChat = chatService.createNewChat();

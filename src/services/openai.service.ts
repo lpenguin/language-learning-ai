@@ -1,6 +1,6 @@
 import { apiClient } from '../api/client';
-import { API_CONFIG, SYSTEM_PROMPT } from '../config/api';
-import { OpenAIResponse } from '../types/api';
+import { SYSTEM_PROMPT } from '../config/api';
+import { APIConfig, OpenAIResponse } from '../types/api';
 import { Message, SystemMessage, OpenAIRole } from '../types/message';
 import { ExerciseAnswer } from '../types/exercise';
 
@@ -11,6 +11,8 @@ interface OpenAIMessage {
 
 export class OpenAIService {
   private static instance: OpenAIService;
+  private currentApiKey: string = '';
+  private currentBaseURL: string = 'https://api.openai.com/v1';
 
   private constructor() {}
 
@@ -21,7 +23,17 @@ export class OpenAIService {
     return this.instance;
   }
 
+  public setApiKey(apiKey: string, baseURL: string) {
+    this.currentApiKey = apiKey;
+    this.currentBaseURL = baseURL;
+    apiClient.updateConfig(apiKey, baseURL);
+  }
+
   public async generateResponse(messages: Message[], customSystemPrompt?: string): Promise<string> {
+    if (!this.currentApiKey) {
+      throw new Error('API key not set. Please configure your API key in settings.');
+    }
+
     const systemMessage: SystemMessage = {
       role: 'system',
       content: customSystemPrompt || SYSTEM_PROMPT,
@@ -62,11 +74,13 @@ export class OpenAIService {
   }
 
   private async makeOpenAIRequest(messages: OpenAIMessage[]): Promise<string> {
+    const config = new APIConfig(this.currentApiKey, this.currentBaseURL);
+    
     const response = await apiClient.post<OpenAIResponse>('/chat/completions', {
-      model: API_CONFIG.model,
+      model: config.model,
       messages: messages,
-      temperature: API_CONFIG.temperature,
-      max_tokens: API_CONFIG.maxTokens
+      temperature: config.temperature,
+      max_tokens: config.maxTokens
     });
 
     return response.choices[0].message.content;
