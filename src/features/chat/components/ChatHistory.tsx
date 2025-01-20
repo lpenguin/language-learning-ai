@@ -14,6 +14,16 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
   isLoading,
   onExerciseSubmit
 }) => {
+  const messagesEndRef = React.useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  React.useEffect(() => {
+    scrollToBottom();
+  }, [messages, isLoading]);
+
   return (
     <div className="messages">
       {messages.map((message, index) => (
@@ -28,6 +38,7 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
           AI Tutor is thinking...
         </div>
       )}
+      <div ref={messagesEndRef} />
     </div>
   );
 };
