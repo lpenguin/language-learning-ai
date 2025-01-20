@@ -1,3 +1,5 @@
+import { OpenAIRole } from './message';
+
 export interface OpenAIResponse {
   choices: Array<{
     message: {
@@ -11,8 +13,6 @@ export interface OpenAIError {
     message: string;
   };
 }
-
-import { OpenAIRole } from './message';
 
 export interface APIRequestOptions {
   messages: Array<{
