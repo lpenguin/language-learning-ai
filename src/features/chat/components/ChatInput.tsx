@@ -18,7 +18,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
 }) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  // Force focus whenever value changes
+  // Focus input on mount and when value changes (to maintain focus after submission)
   React.useEffect(() => {
     inputRef.current?.focus();
   }, [value]);
@@ -48,7 +48,6 @@ const ChatInput: React.FC<ChatInputProps> = ({
           value={value}
           onChange={onChange}
           onKeyDown={handleKeyDown}
-          onBlur={() => inputRef.current?.focus()} // Force focus on blur
           placeholder="Chat with your AI tutor or ask for exercises..."
           className="message-input"
           disabled={isLoading}
