@@ -11,6 +11,7 @@
     "axios": "^1.7.9",
     "react": "*",
     "react-dom": "*",
+    "react-markdown": "^9.0.3",
     "react-scripts": "*",
     "tailwindcss": "*",
     "uuid": "^11.0.5"

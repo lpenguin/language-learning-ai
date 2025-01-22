@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 import { Message, AssistantMessage, MessagePart } from '../../../types/message';
 import { WordSubstitutionExercise, ExerciseAnswer } from '../../../types/exercise';
 import WordSubstitutionWidget from '../../exercises/components/WordSubstitution/WordSubstitutionWidget';
@@ -24,7 +25,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, onExerciseSubmit }) 
           if (part.type === 'text') {
             return (
               <div key={`text-${index}`} className="mb-2 message bot-message">
-                {part.text}
+                <ReactMarkdown>{part.text}</ReactMarkdown>
               </div>
             );
           } else if (part.type === 'exercise') {
@@ -52,7 +53,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, onExerciseSubmit }) 
       {message.role === 'user' && message.exerciseAnswer ? (
         <ExerciseAnswerDisplay answer={message.exerciseAnswer} />
       ) : (
-        message.content
+        <ReactMarkdown>{message.content}</ReactMarkdown>
       )}
     </div>
   );
