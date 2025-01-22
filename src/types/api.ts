@@ -30,7 +30,7 @@ export interface APIErrorResponse {
 export class APIConfig {
   readonly apiKey: string;
   readonly baseURL: string;
-  readonly model: string = 'gpt-3.5-turbo';
+  readonly model: string = 'gpt-4o';
   readonly temperature: number = 0.7;
   readonly maxTokens: number = 500;
 
