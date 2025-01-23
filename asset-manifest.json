@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/language-learning-ai/static/css/main.156194c9.css",
-    "main.js": "/language-learning-ai/static/js/main.fe692e20.js",
+    "main.css": "/language-learning-ai/static/css/main.40ecaed8.css",
+    "main.js": "/language-learning-ai/static/js/main.533ee117.js",
     "index.html": "/language-learning-ai/index.html",
-    "main.156194c9.css.map": "/language-learning-ai/static/css/main.156194c9.css.map",
-    "main.fe692e20.js.map": "/language-learning-ai/static/js/main.fe692e20.js.map"
+    "main.40ecaed8.css.map": "/language-learning-ai/static/css/main.40ecaed8.css.map",
+    "main.533ee117.js.map": "/language-learning-ai/static/js/main.533ee117.js.map"
   },
   "entrypoints": [
-    "static/css/main.156194c9.css",
-    "static/js/main.fe692e20.js"
+    "static/css/main.40ecaed8.css",
+    "static/js/main.533ee117.js"
   ]
 }
