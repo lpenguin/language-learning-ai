@@ -24,7 +24,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, onExerciseSubmit }) 
         {message.parts.map((part, index) => {
           if (part.type === 'text') {
             return (
-              <div key={`text-${index}`} className="mb-2 message bot-message">
+              <div key={`text-${index}`} className="mb-2">
                 <ReactMarkdown>{part.text}</ReactMarkdown>
               </div>
             );

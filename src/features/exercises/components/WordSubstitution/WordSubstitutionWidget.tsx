@@ -35,33 +35,31 @@ const WordSubstitutionWidget: React.FC<ExerciseWidgetProps> = ({ sentences, onSu
   const renderSentence = (sentence: string, sentenceIndex: number) => {
     const parts = sentence.split('____');
     return (
-      <div key={sentenceIndex} className="sentence-container">
-        <div className="sentence-content">
-          {parts.map((part, partIndex) => (
-            <React.Fragment key={partIndex}>
-              <span>{part}</span>
-              {partIndex < parts.length - 1 && (
-                <input
-                  type="text"
-                  className="word-input"
-                  value={answers[sentenceIndex][partIndex] || ''}
-                  onChange={(e) => handleAnswerChange(sentenceIndex, partIndex, e.target.value)}
-                  placeholder="Enter word"
-                  size={Math.max(8, answers[sentenceIndex][partIndex]?.length || 8)}
-                />
-              )}
-            </React.Fragment>
-          ))}
-        </div>
-      </div>
+      <li key={sentenceIndex} className="sentence-content">
+        {parts.map((part, partIndex) => (
+          <React.Fragment key={partIndex}>
+            <span>{part}</span>
+            {partIndex < parts.length - 1 && (
+              <input
+                type="text"
+                className="word-input"
+                value={answers[sentenceIndex][partIndex] || ''}
+                onChange={(e) => handleAnswerChange(sentenceIndex, partIndex, e.target.value)}
+                placeholder="Enter word"
+                size={Math.max(8, answers[sentenceIndex][partIndex]?.length || 8)}
+              />
+            )}
+          </React.Fragment>
+        ))}
+      </li>
     );
   };
 
   return (
     <div className="widget-container">
-      <div className="sentences-list">
+      <ol className="sentences-list">
         {sentences.map((sentence, index) => renderSentence(sentence, index))}
-      </div>
+      </ol>
       <button
         onClick={handleSubmit}
         className="exercise-submit-button"
